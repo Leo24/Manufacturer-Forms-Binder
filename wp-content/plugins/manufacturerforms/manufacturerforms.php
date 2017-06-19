@@ -11,17 +11,11 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
 class ManufacturerForms{
 
-    const ENABLED_FORM_ID   = '1';
-    const DISABLED_FORM_ID  = '2';
-    const PENDING_FORM_ID   = '3';
-    const STATUS_ENABLED    = 'enabled';
-    const STATUS_DISABLED   = 'disabled';
-    const STATUS_PENDING    = 'pending';
-
     public function __construct(){
 
 
         add_action('init', array($this,'createPostTypeManufacturer'));
+        add_action('init', array($this, 'wp_add_scripts'));
 
         add_filter ('the_content', array($this,'insertManufacturerForms'));
 
@@ -69,33 +63,47 @@ class ManufacturerForms{
         register_post_type('manufacturer', $args);
     }
 
-   public function insertManufacturerForms($content) {
+    public function wp_add_scripts()
+    {
+        wp_register_style( 'jquery-ui-css', ( 'https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css') );
+        wp_register_script( 'jquery-ui', 'https://code.jquery.com/ui/1.12.1/jquery-ui.js', array( 'jquery' ) );
 
-       $args = array(
-           'post_type' => 'manufacturer',
-       );
-
-       $manufacturers = get_posts($args);
-
-       foreach($manufacturers as $manufacturer){
-           $fields = get_fields($manufacturer->ID);
-           $formId = 0;
-           if($fields['status'] === Self::STATUS_ENABLED){
-               $formId = Self::ENABLED_FORM_ID;
-           }
-           elseif($fields['status'] === Self::STATUS_DISABLED){
-               $formId = Self::DISABLED_FORM_ID;
-           }
-           elseif($fields['status'] === Self::STATUS_PENDING){
-               $formId = Self::PENDING_FORM_ID;
-           }
-
-            $content.= gravity_form( $formId, $display_title = true, $display_description = true, $display_inactive = false, $field_values = null, $ajax = false, $tabindex = 0, $echo = true );
-       }
-
-        return $content;
+        wp_enqueue_style( 'jquery-ui-css' );
+        wp_enqueue_script( 'jquery-ui' );
     }
 
+
+
+
+    public function insertManufacturerForms($content)
+    {
+        if (is_archive()) {
+            $forms = RGFormsModel::get_forms(null, 'title');
+            global $post;
+            $fields = get_fields($post->ID);
+            foreach ($forms as $form) {
+                if (strpos(strtolower($form->title), strtolower($fields['status'])) !== false) {
+                    $formChecked = $form;
+                }
+            }
+
+            $content .= gravity_form($formChecked->id, $display_title = true, $display_description = true, $display_inactive = false, $field_values = null, $ajax = false, $tabindex = 0, $echo = true);
+
+//            $content .= '
+//                      <script>
+//                      jQuery( function() {
+//                        jQuery( "#gform_wrapper_'.$formChecked->id.'" ).accordion({
+//                          collapsible: true,
+//                          active: false
+//                        });
+//                      } );
+//                      </script>';
+
+            return $content;
+
+
+        }
+    }
 }
 
 new ManufacturerForms();
