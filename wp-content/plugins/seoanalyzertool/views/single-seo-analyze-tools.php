@@ -98,8 +98,10 @@
         </header>
         <h1>Grow your website traffic.</h1>
         <p class="lead">There are important changes on your website that will grow your traffic. Quick Sprout tells you how to make those changes.</p>
-        <form id="qs-url" action="<?php echo '';?>" method="post">
-            <input type="input" required placeholder="Enter your URL" id="search-url" name="url" value="">
+        <form id="qs-url" action="<?php echo get_admin_url().'admin-post.php';?>" method="post">
+            <input type='hidden' name='action' value='submit-form' />
+            <input type='hidden' name='hide' value='$ques' />
+            <input type="text" required placeholder="Enter your URL" id="search-url" name="url" value="">
             <button id="url-submit-button">Analyze website</button>
         </form>
     </div>
