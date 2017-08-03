@@ -15,7 +15,7 @@
     <meta name="description" content="">
     <meta name="google-site-verification" content="_V4FadjizuJnCsVqMuFi3kSwS387xuQMu1GeaWacW-I">
 
-    <title>Quick Sprout — Make Better Content</title>
+    <title>Youngseaser SEO Analyze tool</title>
 
     <script src="js/hhd8fth.js"></script>
     <script>

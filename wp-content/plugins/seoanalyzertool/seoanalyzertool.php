@@ -135,20 +135,20 @@ class SeoAnalyzerTool{
 
 		}
 
-	if( ! $the_page_report ){
+		if( ! $the_page_report ){
 			// Create post object
-		$_p = array();
-		$_p['post_title'] = $the_page_title_report;
-		$_p['post_content'] = "[seo_analyze_report]";
-		$_p['post_status'] = 'publish';
-		$_p['post_type'] = 'page';
-		$_p['comment_status'] = 'closed';
-		$_p['ping_status'] = 'closed';
-		$_p['post_category'] = array(1); // the default 'Uncatrgorised'
+			$_p = array();
+			$_p['post_title'] = $the_page_title_report;
+			$_p['post_content'] = "[seo_analyze_report]";
+			$_p['post_status'] = 'publish';
+			$_p['post_type'] = 'page';
+			$_p['comment_status'] = 'closed';
+			$_p['ping_status'] = 'closed';
+			$_p['post_category'] = array(1); // the default 'Uncatrgorised'
 
-		// Insert the post into the database
-		$the_page_report_id = wp_insert_post( $_p );
-	}else {
+			// Insert the post into the database
+			$the_page_report_id = wp_insert_post( $_p );
+		}else {
 			// the plugin may have been previously active and the page may just be trashed...
 
 			$the_page_report_id = $the_page->ID;
@@ -202,29 +202,100 @@ class SeoAnalyzerTool{
 
 	}
 
-//add_action('admin_post_submit-form', '_handle_form_action'); // If the user is logged in
-//add_action('admin_post_nopriv_submit-form', '_handle_form_action'); // If the user in not logged in
+	public function get_title($url){
+		$str = file_get_contents($url);
+		if(strlen($str)>0){
+			$str = trim(preg_replace('/\s+/', ' ', $str)); // supports line breaks inside <title>
+			preg_match("/\<title\>(.*)\<\/title\>/i",$str,$title); // ignore case
+			return $title[1];
+		}
+	}
+
+	public function get_meta_description($url){
+		$tags = get_meta_tags($url);
+		foreach ($tags as $k => $tag){
+			if($k == 'description'){
+				return $tag;
+			}else{
+				return false;
+			}
+
+		}
+	}
+
+	public function get_content($url){
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_HEADER, 0);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+		$data = curl_exec($ch);
+		curl_close($ch);
+
+		$content = array();
+//parsing begins here:
+		$doc = new DOMDocument();
+		@$doc->loadHTML($data);
+		$nodes = $doc->getElementsByTagName('title');
+
+		$content['title'] = $nodes->item(0)->nodeValue;
+		$metas = $doc->getElementsByTagName('meta');
+
+		for ($i = 0; $i < $metas->length; $i++)
+		{
+			$meta = $metas->item($i);
+			if($meta->getAttribute('name') == 'description')
+				$content['description'] = $meta->getAttribute('content');
+			if($meta->getAttribute('name') == 'keywords')
+				$content['keywords'] = $meta->getAttribute('content');
+		}
+
+
+		$xpath = new DOMXPath($doc);
+		$h2text = $xpath->evaluate("string(//h2/text())");
+
+		for($i = 1; $i < 6; $i++){
+			$headings = $doc->getElementsByTagName('h'.$i);
+			for ($j = 0; $j < $headings->length; $j++)
+			{
+				$heading = $headings->item($j);
+				$content['headings']['h'.$i][] = $heading->nodeValue;
+			}
+		}
+
+
+		return $content;
+
+	}
+
 	public function _handle_form_action(){
 		if(isset($_POST) && !empty($_POST['url'])){
 			$url = $_POST['url'];
-			$foo = false;
 
-			$_p = array();
-			$_p['post_title'] = $url;
-			$_p['post_content'] = "[seo_analyze_report]";
-			$_p['post_status'] = 'publish';
-			$_p['post_type'] = 'seoanalyzertool';
-			$_p['comment_status'] = 'closed';
-			$_p['ping_status'] = 'closed';
-			$_p['post_category'] = array(1); // the default 'Uncatrgorised'
+			$title = $this->get_title($url);
+			$description = $this->get_meta_description($url);
 
-			// Insert the post into the database
-			$the_page_report_id = wp_insert_post( $_p );
+			$content = $this->get_content($url);
+			$report_ID = post_exists($url);
 
-//			wp_redirect(get_home_url().'/seo-analyze-report');
-//			wp_redirect(get_permalink(get_post($the_page_report_id)));
-			require_once('single-seo-analyze-report.php');
-//			locate_template('Page SEO Analyze Report');
+
+			if($report_ID == 0) {
+				$_p                   = array();
+				$_p['post_title']     = $url;
+				$_p['post_content']   = "[seo_analyze_report]";
+				$_p['post_status']    = 'publish';
+				$_p['post_type']      = 'seoanalyzertool';
+				$_p['comment_status'] = 'closed';
+				$_p['ping_status']    = 'closed';
+				$_p['post_category']  = array( 1 ); // the default 'Uncatrgorised'
+
+				// Insert the post into the database
+				$the_page_report_id = wp_insert_post( $_p );
+				$report_post        = get_post($the_page_report_id);
+			}else{
+				$report_post        = get_post($report_ID);
+			}
+			require_once(dirname( __FILE__ ) . '/views/single-seo-analyze-report.php');
 		}
 	}
 
