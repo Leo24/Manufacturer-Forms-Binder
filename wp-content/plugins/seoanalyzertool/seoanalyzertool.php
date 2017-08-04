@@ -250,10 +250,6 @@ class SeoAnalyzerTool{
 				$content['keywords'] = $meta->getAttribute('content');
 		}
 
-
-		$xpath = new DOMXPath($doc);
-		$h2text = $xpath->evaluate("string(//h2/text())");
-
 		for($i = 1; $i < 6; $i++){
 			$headings = $doc->getElementsByTagName('h'.$i);
 			for ($j = 0; $j < $headings->length; $j++)
@@ -263,9 +259,28 @@ class SeoAnalyzerTool{
 			}
 		}
 
+		foreach($content['headings'] as $tag => $heading){
+			if($tag !== 'h1'){
+				foreach($heading as $k => $string ){
+
+					$headingLength = strlen($string);
+					if($headingLength >= 15 && $headingLength <= 65){
+						$content['headings'][$tag]['pass'][$k][] = $string;
+						$content['headings'][$tag]['pass'][$k]['length'] = $headingLength;
+					}elseif ($headingLength < 15 ) {
+						//too short
+						$content['headings'][$tag]['warning']['short'][$k][] = $string;
+						$content['headings'][$tag]['warning']['short'][$k]['extra_length'] = 15 - $headingLength;
+					}elseif ($headingLength > 65 ) {
+						//too long
+						$content['headings'][$tag]['warning']['long'][$k][] = $string;
+						$content['headings'][$tag]['warning']['long'][$k]['extra_length'] = $headingLength - 65;
+					}
+				}
+			}
+		}
 
 		return $content;
-
 	}
 
 	public function _handle_form_action(){

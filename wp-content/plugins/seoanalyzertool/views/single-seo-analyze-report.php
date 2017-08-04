@@ -228,54 +228,54 @@
 
                                         <h3>Page Title</h3>
                                         <section>
-											<?php $titleLength = strlen($content['title']);?>
-											<?php if($titleLength  > 15 && $titleLength < 65):?>
+                                            <?php $titleLength = strlen($content['title']);?>
+                                            <?php if($titleLength  > 15 || $titleLength < 65):?>
                                                 <h4 class="text-success"><span class="label">Pass</span> The page title length is perfect</h4>
                                                 <p><strong>The page title is <?php echo $titleLength;?> characters.</strong> The ideal length is 15-65 characters. If your title tag exceed 60 characters, Google will only show the first 60.</p>
-											<?php elseif($titleLength  < 15):?>
+                                            <?php elseif($titleLength  < 15):?>
                                                 <h4 class="text-warning"><span class="label">Pass</span> The page title length is too short</h4>
                                                 <p><strong>The page title is <?php echo $titleLength;?> characters.</strong> The ideal length is 15-65 characters. If your title tag exceed 60 characters, Google will only show the first 60.</p>
-											<?php elseif($titleLength  > 65):?>
+                                            <?php elseif($titleLength  > 65):?>
                                                 <h4 class="text-warning"><span class="label">Pass</span> The page title length is too long</h4>
                                                 <p><strong>The page title is <?php echo $titleLength;?> characters.</strong> The ideal length is 15-65 characters. If your title tag exceed 60 characters, Google will only show the first 60.</p>
-											<?php endif;?>
+                                            <?php endif;?>
                                         </section>
 
                                         <section>
-											<?php if(!empty($content['title'])):?>
+                                            <?php if(!empty($content['title'])):?>
                                                 <h4 class="text-success"><span class="label">Pass</span> Page title found</h4>
                                                 <p><strong>This page has a page title.</strong> It's important to have one page title on every page of your website. Title tags are the online equivalent of newspaper headlines.</p>
-											<?php else:?>
+                                            <?php else:?>
                                                 <h4 class="text-warning"><span class="label">Warning</span> Page title not found</h4>
                                                 <p><strong>This page has no page title.</strong> It's important to have one page title on every page of your website. Title tags are the online equivalent of newspaper headlines.</p>
-											<?php endif;?>
+                                            <?php endif;?>
                                         </section>
 
                                         <hr>
 
                                         <h3>Meta Description</h3>
-										<?php $descriptionLength = strlen($content['description']);?>
-										<?php if($descriptionLength > 51 && $descriptionLength < 160):?>
+                                        <?php $descriptionLength = strlen($content['description']);?>
+                                        <?php if($descriptionLength > 51 && $descriptionLength < 160):?>
                                         <section>
                                             <h4 class="text-success"><span class="label">Pass</span> The meta description is perfect</h4>
                                             <p><strong>The meta description is <?php echo $descriptionLength;?> characters.</strong> The meta description is what search engines use to gauge what topic you’re writing about and the exact audience that they should send to that page. So, make it descriptive and short – optimally between 51-160 characters.</p>
-											<?php elseif($titleLength  > 160):?>
+                                            <?php elseif($titleLength  > 160):?>
                                                 <h4 class="text-warning"><span class="label">Warning</span> The meta description is too long</h4>
                                                 <p><strong>The meta description is <?php echo $descriptionLength;?> characters.</strong> The meta description is what search engines use to gauge what topic you’re writing about and the exact audience that they should send to that page. So, make it descriptive and short – optimally between 51-160 characters.</p>
-											<?php elseif($titleLength  < 51):?>
+                                            <?php elseif($titleLength  < 51):?>
                                                 <h4 class="text-warning"><span class="label">Warning</span> The meta description is too short</h4>
                                                 <p><strong>The meta description is <?php echo $descriptionLength;?> characters.</strong> The meta description is what search engines use to gauge what topic you’re writing about and the exact audience that they should send to that page. So, make it descriptive and short – optimally between 51-160 characters.</p>
-											<?php endif;?>
+                                            <?php endif;?>
                                         </section>
 
                                         <section>
-											<?php if(!empty($content['description'])):?>
+                                            <?php if(!empty($content['description'])):?>
                                                 <h4 class="text-success"><span class="label">Pass</span> Meta description found</h4>
                                                 <p><strong>This page has a meta description.</strong> It's important to only have one meta description every page of your website. The meta description shows visitors what your page is about in search engine results.</p>
-											<?php else:?>
+                                            <?php else:?>
                                                 <h4 class="text-warning"><span class="label">Warning</span> No meta description found</h4>
                                                 <p><strong>This page has a meta description.</strong> It's important to only have one meta description every page of your website. The meta description shows visitors what your page is about in search engine results.</p>
-											<?php endif;?>
+                                            <?php endif;?>
                                         </section>
 
                                         <div id="685f3839-c788-47a2-818a-ce96677ab94c" class="monitor-nudge">
@@ -330,13 +330,13 @@
                                         <h3>Page Headline</h3>
 
                                         <section>
-											<?php if(!empty($content['headings']['h1'])):?>
+                                            <?php if(!empty($content['headings']['h1'])):?>
                                                 <h4 class="text-success"><span class="label">Pass</span>&lt;H1&gt; tags present on page</h4>
                                                 <p><strong>&lt;H1&gt; tags were found on the page.</strong> At the very least, make sure your page has one &lt;H1&gt; heading. This is a great way to give your keywords meaning and structure your page content accordingly.</p>
-											<?php else:?>
+                                            <?php else:?>
                                                 <h4 class="text-warning"><span class="label">Warning</span> There are no &lt;H1&gt; tags</h4>
                                                 <p><strong>No &lt;H1&gt; tags were found on the page.</strong> At the very least, make sure your page has one &lt;H1&gt; heading. This is a great way to give your keywords meaning and structure your page content accordingly.</p>
-											<?php endif;?>
+                                            <?php endif;?>
                                         </section>
 
                                         <hr>
@@ -354,37 +354,29 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-
-                                                <?php foreach($content['headings'] as $heading):?>
-                                                <?php if($content['headings'] > 15 && $content['headings'] < 65):?>
-
-                                                <?php endif;?>
+                                                <?php foreach($content['headings'] as $tag => $heading):?>
+                                                    <?php if($tag !== 'h1'):?>
+                                                        <?php if(!empty($heading['warning'])):?>
+                                                            <?php foreach($heading['warning'] as $key => $value):?>
+                                                                <?php if($key == 'short'):?>
+                                                                    <?php foreach($value as $k => $v):?>
+                                                                        <tr>
+                                                                            <td><?php echo $tag;?>: <?php echo $v[0];?></td>
+                                                                            <td><?php echo $v['extra_length']?> characters too short</td>
+                                                                        </tr>
+                                                                    <?php endforeach;?>
+                                                                <?php elseif($key == 'long'):?>
+                                                                    <?php foreach($value as $k => $v):?>
+                                                                        <tr>
+                                                                            <td><?php echo $tag;?>: <?php echo $v[0];?></td>
+                                                                            <td><?php echo $v['extra_length']?> characters too long</td>
+                                                                        </tr>
+                                                                    <?php endforeach;?>
+                                                                <?php endif;?>
+                                                            <?php endforeach;?>
+                                                        <?php endif;?>
+                                                    <?php endif;?>
                                                 <?php endforeach;?>
-                                                <tr>
-                                                    <td>Epic SEO.</td>
-                                                    <td>6 characters too short</td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>SEO Packages</td>
-                                                    <td>3 characters too short</td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>I will rank you First, 50 PR10 Niche Related Backlinks, 40days SEO for $5</td>
-                                                    <td>8 characters too long</td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>I will promote YouTube video UNLIMITED views opportunity with viral Social Media method for $5</td>
-                                                    <td>29 characters too long</td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>I will do Keywords Research, get TRAFFIC with 300 keyphrases for $5</td>
-                                                    <td>2 characters too long</td>
-                                                </tr>
-
                                                 </tbody>
                                             </table>
 
@@ -398,52 +390,18 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-
-                                                <tr>
-                                                    <td>Online marketing. The right way.</td>
-                                                    <td>32 characters</td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>Backlinks. Keywords. SEO Doctor.</td>
-                                                    <td>32 characters</td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>Feed you business with high quality traffic.</td>
-                                                    <td>44 characters</td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>Top Rated Seller</td>
-                                                    <td>16 characters</td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>Businesses all around the world choose us.</td>
-                                                    <td>42 characters</td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>Check out our most popular GIGs on Fiverr</td>
-                                                    <td>41 characters</td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>Come to Fiverr and start working with us.</td>
-                                                    <td>41 characters</td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>We are glad to help!</td>
-                                                    <td>20 characters</td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td>I will 90 Days UNLlMITED Traffic, Targeted and Safe for $5</td>
-                                                    <td>58 characters</td>
-                                                </tr>
-
+                                                <?php foreach($content['headings'] as $tag => $heading):?>
+                                                    <?php if($tag !== 'h1'):?>
+                                                        <?php if(!empty($heading['pass'])):?>
+                                                            <?php foreach($heading['pass'] as $key => $value):?>
+                                                                <tr>
+                                                                    <td><?php echo $tag;?>: <?php echo $value[0];?></td>
+                                                                    <td><?php echo $value['length'];?></td>
+                                                                </tr>
+                                                            <?php endforeach;?>
+                                                        <?php endif;?>
+                                                    <?php endif;?>
+                                                <?php endforeach;?>
                                                 </tbody>
                                             </table>
 
