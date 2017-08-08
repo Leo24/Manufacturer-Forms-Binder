@@ -89,7 +89,11 @@
     <div class="hero">
         <div class="icons">
             <div class="phone"></div>
-            <div class="envelope"></div>
+            <div class="container">
+            <div class="container-inner">
+                <div class="envelope"></div>
+                </div>
+            </div>
             <div class="cloud"></div>
         </div>
     </div>
