@@ -199,7 +199,7 @@ body.current {
   .landing-201702 .hero p.cta {
     margin: 50px auto; }
 .landing-201702 .content-flow {
-  padding: 30px 60px;
+  padding: 200px 60px 60px 30px;
   text-align: center; }
   @media only screen and (max-width: 400px) {
     .landing-201702 .content-flow {
@@ -1217,7 +1217,6 @@ body.current {
   height: 115px;
   background: url('../images/envelope.png') 50% 59%;
   position: absolute;
-  left: 11%;
 }
 
 .hero .icons .cloud{
@@ -1226,6 +1225,50 @@ body.current {
   height: 90px;
   background: url('../images/cloud.png') 50% 59%;
   float: right;
+}
+
+@media only screen and (max-width: 1800px) {
+  .hero .icons .container{
+    left: 11%;
+  }
+  .hero .icons .container-inner{
+    width: 82%;
+  }
+}
+@media only screen and (max-width: 1638px) {
+  .hero .icons .container{
+    left: 12%;
+  }
+  .hero .icons .container-inner{
+    width: 80%;
+  }
+}
+
+@media only screen and (max-width: 1565px) {
+  .hero .icons .container{
+    left: 17%;
+  }
+  .hero .icons .container-inner{
+    width: 62%;
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  .hero .icons .container{
+    left: 17%;
+  }
+  .hero .icons .container-inner{
+    width: 60%;
+  }
+}
+
+@media only screen and (max-width: 1100px) {
+  .hero .icons .container{
+    left: 27%;
+  }
+  .hero .icons .container-inner{
+    width: 18%;
+  }
 }
 
 
