@@ -18,7 +18,9 @@ $(function() {
 
   $(document).ready(function(){
 
-    $(window).scrollTop($(window).scrollTop()+1);
+
+    var y = $(window).scrollTop();  //your current y position on the page
+    $(window).scrollTop(y-1);
 
     $(window).on("scroll", function() {
 
